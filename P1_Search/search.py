@@ -87,17 +87,74 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    stack = util.Stack()
+    starting_position = problem.getStartState()
+    stack.push((starting_position, []))
+    explored_locations = []
+    while not stack.isEmpty():
+        location, path = stack.pop()
+        if location not in explored_locations:
+            explored_locations.append(location)
+            if problem.isGoalState(location):
+                return path
+            else:
+                children = problem.getSuccessors(location)
+                for child in children:
+                    loc = child[0]
+                    pat = child[1]
+                    if loc not in explored_locations:
+                        new_node = (loc, path + [pat])
+                        stack.push(new_node)
+    return []
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queue = util.Queue()
+    starting_position = problem.getStartState()
+    queue.push((starting_position, []))
+    explored_locations = []
+
+    while not queue.isEmpty():
+        location, path = queue.pop()
+
+        if location not in explored_locations:
+            explored_locations.append(location)
+            if problem.isGoalState(location):
+                return path
+            else:
+                children = problem.getSuccessors(location)
+                for child in children:
+                    loc = child[0]
+                    pat = child[1]
+                    if loc not in explored_locations:
+                        new_node = (loc, path + [pat])
+                        queue.push(new_node)
+    return []
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    p_queue = util.PriorityQueue()
+    starting_position = problem.getStartState()
+    p_queue.push((starting_position, []), 0)
+    explored_locations = []
+    while not p_queue.isEmpty():
+        location, path = p_queue.pop()
+        if location not in explored_locations:
+            explored_locations.append(location)
+            if problem.isGoalState(location):
+                return path
+            else:
+                children = problem.getSuccessors(location)
+                for child in children:
+                    loc = child[0]
+                    pat = child[1]
+                    if loc not in explored_locations:
+                        new_node = (loc, path + [pat])
+                        new_cost = problem.getCostOfActions(new_node[1])
+                        p_queue.update(new_node, new_cost)
+    return []
 
 def nullHeuristic(state, problem=None):
     """
@@ -109,7 +166,26 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    p_queue = util.PriorityQueue()
+    starting_position = problem.getStartState()
+    p_queue.push((starting_position, []), 0 + heuristic(starting_position, problem))
+    explored_locations = []
+    while not p_queue.isEmpty():
+        location, path = p_queue.pop()
+        if location not in explored_locations:
+            explored_locations.append(location)
+            if problem.isGoalState(location):
+                return path
+            else:
+                children = problem.getSuccessors(location)
+                for child in children:
+                    loc = child[0]
+                    pat = child[1]
+                    if loc not in explored_locations:
+                        new_node = (loc, path + [pat])
+                        new_cost = problem.getCostOfActions(new_node[1]) + heuristic(new_node[0], problem)
+                        p_queue.update(new_node, new_cost)
+    return []
 
 
 # Abbreviations

@@ -196,6 +196,19 @@ class PriorityQueue:
         # If item not in priority queue, do the same thing as self.push.
 
         "*** YOUR CODE HERE ***"
+        for index in range(len(self.heap)):
+            pre_priority, count, pre_item = self.heap.__getitem__(index)
+            if pre_item == item:
+                if priority > pre_priority:
+                    new_entry = (priority, count, item)
+                    self.heap.remove(self.heap.__getitem__(index))
+                    self.heap.append(new_entry)
+                    heapq.heapify(self.heap)
+                    break
+                else:
+                    break
+        else:
+            self.push(item, priority)
 
 class PriorityQueueWithFunction(PriorityQueue):
     """
